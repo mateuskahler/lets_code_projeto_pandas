@@ -4,27 +4,27 @@ import numpy as np
 from pandas.core.frame import DataFrame
 
 def pegar_dados_quantitativos(df: pd.DataFrame):
-    return df.select_dtypes(include=np.numeric)
+    return df.select_dtypes(include=np.number) 
 
-def gerar_estatisticas(df, colunas : list = None, map_colunas:dict=None):
-    if colunas is None:
-        colunas = df.columns
-    
-    df_estatisticas = (
-        df.describe()
-          .loc[colunas]
-    )
+def gerar_estatisticas(df, estimadores : list = None, map_nomes_estimadores:dict=None):
 
-    if map_colunas:
-        df_estatisticas.rename(index = map_colunas)
+    df_estatisticas = df.describe()
+
+
+    if estimadores:
+        df_estatisticas = df_estatisticas.loc[estimadores]
+
+    if map_nomes_estimadores:
+        df_estatisticas = df_estatisticas.rename(index = map_nomes_estimadores)
 
     return df_estatisticas.T
 
 
-def gerar_estatisticas_quantitativas(df:pd.DataFrame, colunas : iterable = None, map_colunas:dict=None):
-    df_estatisticas = gerar_estatisticas(pegar_dados_quantitativos(df),
-                                         colunas=colunas, 
-                                         map_colunas=map_colunas)
+def gerar_estatisticas_quantitativas(df:pd.DataFrame, estimadores = None, map_nomes_estimadores:dict=None):
+    df = pegar_dados_quantitativos(df)
+    df_estatisticas = gerar_estatisticas(df,
+                                         estimadores=estimadores, 
+                                         map_nomes_estimadores=map_nomes_estimadores)
     return df_estatisticas
 
 def eh_outliner(df:pd.DataFrame):
@@ -34,11 +34,11 @@ def eh_outliner(df:pd.DataFrame):
     filtro_bool = (df < q1-1.5*iqr) | (df > q3 + 1.5 * iqr)
     return filtro_bool
 
-def remove_outliners(df:pd.DataFrame, apenas_numericos=False):
+def remover_outliners(df:pd.DataFrame, apenas_numericos=False):
     if apenas_numericos:
         df = pegar_dados_quantitativos(df)
     filtro_bool = eh_outliner(df)
     return df.mask(filtro_bool)
 
 def preencher_com_mediana(df:pd.DataFrame):
-    return df.fillna('median')
+    return df.fillna(df.median())
