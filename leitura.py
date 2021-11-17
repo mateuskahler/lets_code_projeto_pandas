@@ -25,3 +25,10 @@ def juntar_arquivos(*arquivos, pasta, tipo_join=None, chave=None):
         df.to_csv(arquivo, sep=';', index=False)
 
     return df
+
+def carregar_dados():
+    arquivos = ['1_demografico.csv',
+                '2_renda_gastos.csv',
+                '3_bens.csv']
+    pasta = 'dados'
+    return juntar_arquivos(*arquivos, pasta=pasta, tipo_join='left', chave=['ID', 'Region'])
