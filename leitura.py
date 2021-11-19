@@ -3,10 +3,10 @@ import os
 
 PASTA_DADOS = os.path.join('.', 'dados')
 
-def ler_varios_csv_na_pasta(pasta, **kwargs):
-    arquivos_nomes_com_extensao = os.listdir(pasta)
-
-    arquivos_csv = [i for i in arquivos_nomes_com_extensao if i.split('.')[-1]=='csv']
+def ler_varios_csv_na_pasta(arquivos_csv, pasta, **kwargs):
+    if arquivos_csv is None:
+        arquivos_nomes_com_extensao = os.listdir(pasta)
+        arquivos_csv = [i for i in arquivos_nomes_com_extensao if i.split('.')[-1]=='csv']
 
     lista_de_dados = []
     for i in arquivos_csv:
@@ -50,23 +50,30 @@ def _ache_colunas_iguais(frame, other):
     colunas_iguais = [i for i in cols1 if i in cols2]
     return colunas_iguais if colunas_iguais else None
 
-def carregar_dados(pasta = PASTA_DADOS, **kwargs):
+def carregar_dados(arquivos = None, pasta = PASTA_DADOS, **kwargs):
     """
-    Faz a leitura de todos os dados em csv da pasta requisitada.
+    Faz a leitura e junta todos os dados de interesse da pasta requisitada.
 
     Parâmetros
     ----------
+    aquivos: iterable
+        Iterável com nomes dos arquivos aos quais será feita a leitura. 
+        Padrão: None, lê todos os arquivos em csv na pasta.
+
     pasta: str
-        A pasta onde se encontram os arquivos. Padrão: pasta dados no caminho de execução.
+        A pasta onde se encontram os arquivos. 
+        Padrão: pasta dados no caminho de execução.
+
     kwargs:
-        Parâmetros opcionais usados para leitura dos csv. Ex: sep=';' ou encoding='utf-8'.
+        Parâmetros opcionais usados para leitura dos csv. 
+        Ex: sep=';' ou encoding='utf-8'.
 
     Retorna
     -------
     Data frame com todos os dados da pasta unidos.
     """
     
-    dados = ler_varios_csv_na_pasta(pasta, **kwargs)
+    dados = ler_varios_csv_na_pasta(arquivos, pasta, **kwargs)
 
     frame = juntar_varios_arquivos(*dados)
 
