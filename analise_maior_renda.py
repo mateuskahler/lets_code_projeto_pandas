@@ -12,4 +12,4 @@ def compara_media_df(df, df_maior_renda):
 
     df_media = df_media_total.join(df_media_decimo, how='left')
 
-    return df_media.T
+    return df_media
