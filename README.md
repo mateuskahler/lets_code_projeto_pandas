@@ -1,32 +1,25 @@
 # lets_code_projeto_pandas
 
-1) Juntar as bases, observe as colunas coincidentes, caso não exista utilize o indice.  (Maria)
- -> retornar DataFrame, usar função "ler_arquivo()", retornar todos bancos juntos
+Contém o resultado de um exercício proposto pelo curso Let's Code Ciência de Dados. Realizado em grupo e objetivando treinar uso do GitHub e [Pandas](https://pandas.pydata.org/).
 
-2.a)  Para quantitativas, calcular:
-Mínimo, Primeiro Quartil, Mediana, Terceiro Quartil, Máximo, Média
-função "calcular_indicadores_quatitativos (data_frame )" (??)
+### Objetivos
+- Juntar as bases de dados, observando as colunas coincidentes; Caso não existam, utilizar o índice.
 
-3) Trate os dados Outliers como faltantes e crie novamente o relatório para observarmos a diferenca
-função "tratar_outliers( data_frame , colunas??)" (??)
+- Para variáveis quantitativas, calcular:  
+Mínimo, Primeiro Quartil, Mediana, Terceiro Quartil, Máximo, Média.
 
-4) Trate os dados Outliers inserindo no lugar a mediana e crie novamente o relatório para observarmos a diferenca:
-função "substituir_outliers (data_frame )" (??)
+- Tratar os dados _outliers_ como faltantes e criar novamente o relatório, para observar a diferenca.
 
-2.b) Faca um relatório dos itens acima (imprimir tabela?)
-(Rafael)
--> imprimir tabela
+- Tratar os dados Outliers substituindo-os pela mediana, e crie novamente o relatório.
 
-5) Faca um relatório no qual cada variável qualitativa deve ter:
-Frequência Absoluta, Frequência Acumulada, Frequência Relativa, Frequência Relativa Acumulada
-(Mateus)
+- Fazer relatório dos itens acima.
 
-6) Separe os 10% com maior renda(Ordem decrescente) em um novo csv
+- Para variáveis qualitativas, calcular:  
+Frequência Absoluta, Frequência Acumulada, Frequência Relativa, Frequência Relativa Acumulada.
 
-7) Criar os dummies para pelo menos 3 das variáveis qualitativas
-(Hugo)
+- Separar os 10% dos dados relativos às famílias de maior renda e exportar como novo _csv_.
 
-8) Compare a média das variáveis(Quantitativos + 3 Qualitativas) da populacão dos 10% com maior renda vs o restante
-(Leandro)
+- Criar os dummies para pelo menos 3 das variáveis qualitativas.
 
-(Rafael e Maria já fizeram tudo (ou quase), usaremos como referência)
+- Comparar a média das variáveis (Quantitativas e 3 Qualitativas) da populacão dos 10% com maior renda contra o restante.
+
