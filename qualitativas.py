@@ -13,9 +13,10 @@ class AnalisesDeVariavelQualitativa:
             _frequencia_relativa(coluna),
             _frequencia_relativa_acumulada(coluna),
         ], axis=1)
+        self.analise.index.name = self.nome_da_variavel
 
 
-def analisar_variaveis_qualitativas(dados: DataFrame) -> list[AnalisesDeVariavelQualitativa]:
+def analisar_variaveis_qualitativas(dados: DataFrame) -> list:
     colunas_qualitativas = _nomes_colunas_qualitativas(dados)
 
     analises = [AnalisesDeVariavelQualitativa(
@@ -57,7 +58,7 @@ def _frequencia(serie: Series, relativa: bool, acumulada: bool) -> Series:
         return contagem
 
 
-def _nomes_colunas_qualitativas(df: DataFrame) -> list[str]:
+def _nomes_colunas_qualitativas(df: DataFrame) -> list:
     """
     Retorna lista com nome das colunas que possuem variáveis qualitativas
     """
