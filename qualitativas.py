@@ -1,18 +1,5 @@
 from collections import namedtuple
-from pandas import DataFrame, Series
-
-
-def _frequencia(serie: Series, relativa: bool, acumulada: bool) -> Series:
-    contagem = serie.value_counts(normalize=relativa).sort_index()
-
-    if acumulada:
-        # todo
-        pass
-
-    return contagem
-
-
-AnaliseQualitativa = namedtuple('AnaliseQualitativa', ['nome', 'dados'])
+from pandas import DataFrame, Series, concat
 
 
 class AnalisesDeVariavelQualitativa:
@@ -20,36 +7,54 @@ class AnalisesDeVariavelQualitativa:
         self.nome_da_variavel = nome_da_variavel
         coluna = dados[nome_da_variavel]
 
-        self.analises = [
+        self.analise = concat([
             _frequencia_absoluta(coluna),
             _frequencia_absoluta_acumulada(coluna),
             _frequencia_relativa(coluna),
             _frequencia_relativa_acumulada(coluna),
-        ]
+        ], axis=1)
 
 
-def _frequencia_absoluta(serie: Series) -> AnaliseQualitativa:
-    dados = _frequencia(serie, relativa=False, acumulada=False)
+def analisar_variaveis_qualitativas(dados: DataFrame) -> list[AnalisesDeVariavelQualitativa]:
+    colunas_qualitativas = _nomes_colunas_qualitativas(dados)
 
-    return AnaliseQualitativa('Frequência Absoluta', dados)
+    analises = [AnalisesDeVariavelQualitativa(
+        dados, coluna) for coluna in colunas_qualitativas]
 
-
-def _frequencia_absoluta_acumulada(serie: Series) -> AnaliseQualitativa:
-    dados = _frequencia(serie, relativa=False, acumulada=True)
-
-    return AnaliseQualitativa('Frequência Absoluta Acumulada', dados)
+    return analises
 
 
-def _frequencia_relativa(serie: Series) -> AnaliseQualitativa:
-    dados = _frequencia(serie, relativa=True, acumulada=False)
+def _frequencia_absoluta(serie: Series) -> Series:
+    resultado = _frequencia(serie, relativa=False, acumulada=False)
 
-    return AnaliseQualitativa('Frequência Relativa', dados)
+    return resultado.rename('Frequência Absoluta')
 
 
-def _frequencia_relativa_acumulada(serie: Series) -> AnaliseQualitativa:
-    dados = _frequencia(serie, relativa=True, acumulada=True)
+def _frequencia_absoluta_acumulada(serie: Series) -> Series:
+    resultado = _frequencia(serie, relativa=False, acumulada=True)
 
-    return AnaliseQualitativa('Frequência Relativa Acumulada', dados)
+    return resultado.rename('Frequência Absoluta Acumulada')
+
+
+def _frequencia_relativa(serie: Series) -> Series:
+    resultado = _frequencia(serie, relativa=True, acumulada=False)
+
+    return resultado.rename('Frequência Relativa')
+
+
+def _frequencia_relativa_acumulada(serie: Series) -> Series:
+    resultado = _frequencia(serie, relativa=True, acumulada=True)
+
+    return resultado.rename('Frequência Relativa Acumulada')
+
+
+def _frequencia(serie: Series, relativa: bool, acumulada: bool) -> Series:
+    contagem = serie.value_counts(normalize=relativa).sort_index()
+
+    if acumulada:
+        return contagem.cumsum()
+    else:
+        return contagem
 
 
 def _nomes_colunas_qualitativas(df: DataFrame) -> list[str]:
@@ -58,11 +63,3 @@ def _nomes_colunas_qualitativas(df: DataFrame) -> list[str]:
     """
     # nos dados fornecidos, colunas do tipo "object" contém as variáveis qualitativas
     return list(df.select_dtypes(['object']).columns)
-
-
-def analisar_variaveis_qualitativas(dados: DataFrame):
-    colunas_qualitativas = _nomes_colunas_qualitativas(dados)
-    analises = [AnalisesDeVariavelQualitativa(
-        dados, coluna) for coluna in colunas_qualitativas]
-
-    return analises
