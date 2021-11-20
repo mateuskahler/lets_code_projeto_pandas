@@ -19,7 +19,7 @@ def ler_csv(arquivo, **kwargs):
      return pd.read_csv(arquivo, **kwargs)
     
     
-def juntar_tabelas(frame, other, tipo_join=None, chave=None):
+def juntar_dataframes(frame, other, tipo_join=None, chave=None):
     if chave:
         df = frame.merge(other, how=tipo_join, on=chave)
     
@@ -28,18 +28,17 @@ def juntar_tabelas(frame, other, tipo_join=None, chave=None):
 
     return df
 
-def juntar_varios_arquivos(*dados):
+def juntar_varios_dataframes(*dados):
     if len(dados) == 0:
         return None
     if len(dados) == 1:
         return dados[0]
 
-    colunas_iguais = _ache_colunas_iguais(dados[0], dados[1])
-    df = juntar_tabelas(dados[0], dados[1], tipo_join='left', chave=colunas_iguais)
+    df = dados[0]
 
-    for i in range(2,len(dados)):
+    for i in range(1,len(dados)):
         colunas_iguais = _ache_colunas_iguais(df, dados[i])
-        df = juntar_tabelas(df, dados[i], tipo_join='left', chave=colunas_iguais)
+        df = juntar_dataframes(df, dados[i], tipo_join='left', chave=colunas_iguais)
     
     return df
 
@@ -75,6 +74,6 @@ def carregar_dados(arquivos = None, pasta = PASTA_DADOS, **kwargs):
     
     dados = ler_varios_csv_na_pasta(arquivos, pasta, **kwargs)
 
-    frame = juntar_varios_arquivos(*dados)
+    frame = juntar_varios_dataframes(*dados)
 
     return frame
